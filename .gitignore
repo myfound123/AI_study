@@ -1,0 +1,16 @@
+# 忽略图片
+*.jpg
+*.png
+*.jpeg
+
+# 忽略 Python 缓存
+__pycache__/
+*.pyc
+
+# 忽略虚拟环境
+.venv/
+venv/
+
+# 忽略大模型文件
+*.pt
+*.onnx
