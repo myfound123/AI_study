@@ -97,6 +97,24 @@ def verify_block(img_path, real_area, label, ratio):
     print(f"  -> 方块预测面积: {predicted_block_area:.2f} cm² (真值: {real_area} cm²) | 误差: {block_error:.2f}%")
     print(f"  -> 叶片预测面积: {predicted_leaf_area:.2f} cm² (像素: {leaf_px:.1f})\n")
 
-# 3. 跑验证组
-verify_block("images/test_3cm.jpg", 9.0, "3cm 验证组", ratio)
-verify_block("images/test_4cm.jpg", 15.8, "4cm 验证组", ratio)
+# ========== 重新标定光照测试组 ==========
+# 1. 用光照组的"正常光"重新算一个属于这个机位的比例尺
+img_light_normal = cv2.imread("images/light_1_normal.jpg") # 换成你的实际图片名
+img_light_normal = cv2.medianBlur(img_light_normal, 5)
+hsv_light = cv2.cvtColor(img_light_normal, cv2.COLOR_BGR2HSV)
+
+# 提取正常光下的方块
+mask_ref_light = cv2.inRange(hsv_light, np.array([90, 40, 20]), np.array([140, 255, 255]))
+mask_ref_light = cv2.morphologyEx(cv2.morphologyEx(mask_ref_light, cv2.MORPH_OPEN, np.ones((7,7),np.uint8)), cv2.MORPH_CLOSE, np.ones((5,5),np.uint8))
+ref_px_light, ref_c_light = largest_contour(mask_ref_light)
+if ref_c_light is not None:
+    ref_px_light = cv2.contourArea(cv2.convexHull(ref_c_light))
+
+# 新的锁定比例尺！专门用于这组光照测试
+ratio_light = 4.0 / ref_px_light
+print(f"【光照组重标定】正常光图片的比例尺 ratio_light = {ratio_light:.8f} cm²/px\n")
+
+# 2. 用新比例尺验证其他光照
+verify_block("images/light_1_normal.jpg", 4.0, "场景1：正常光", ratio_light)
+verify_block("images/light_2_side.jpg", 4.0, "场景2：单侧光", ratio_light)
+verify_block("images/light_3_dark.jpg", 4.0, "场景3：暗光", ratio_light)
