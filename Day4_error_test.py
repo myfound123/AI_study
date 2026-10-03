@@ -2,7 +2,7 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 import cv2, numpy as np
 
-# 复用你昨天写好的函数
+# 复用昨天写好的函数
 def largest_contour(mask):
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if not contours: return 0.0, None
@@ -22,7 +22,7 @@ def run_test(img_path, real_area, label):
     img = cv2.medianBlur(img, 5)
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     
-    # 绿色叶片阈值 (沿用你调好的)
+    # 绿色叶片阈值
     leaf_mask = cv2.inRange(hsv, np.array([35, 25, 15]), np.array([85, 255, 255]))
     # 蓝色方块阈值
     blue_mask = cv2.inRange(hsv, np.array([90, 40, 20]), np.array([140, 255, 255]))
@@ -62,7 +62,7 @@ ref_px, ref_c = largest_contour(mask_ref)
 if ref_c is not None:
     ref_px = cv2.contourArea(cv2.convexHull(ref_c))
 
-# 锁定唯一的、不可更改的比例系数！
+# 锁定唯一的、不可更改的比例系数
 ratio = 4.0 / ref_px 
 print(f"【锁定比例系数】2cm方块定标：ratio = {ratio:.8f} cm²/px\n")
 
@@ -110,7 +110,7 @@ ref_px_light, ref_c_light = largest_contour(mask_ref_light)
 if ref_c_light is not None:
     ref_px_light = cv2.contourArea(cv2.convexHull(ref_c_light))
 
-# 新的锁定比例尺！专门用于这组光照测试
+# 新的锁定比例尺，专门用于这组光照测试
 ratio_light = 4.0 / ref_px_light
 print(f"【光照组重标定】正常光图片的比例尺 ratio_light = {ratio_light:.8f} cm²/px\n")
 
