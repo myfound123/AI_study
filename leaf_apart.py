@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif'] = ['SimHei'] 
+plt.rcParams['axes.unicode_minus'] = False   
 
 # ============ 工具函数 ============
 def extract_mask(img_bgr, lower, upper, extra_mask=None):
@@ -24,7 +26,7 @@ def largest_contour(mask):
     return cv2.contourArea(c), c
 
 # ============ 主流程 ============
-img = cv2.imread("leaf_with_ref.jpg")
+img = cv2.imread("images/leaf_with_ref.jpg")
 if img is None:
     raise FileNotFoundError("图片没读到，检查路径/后缀")
 

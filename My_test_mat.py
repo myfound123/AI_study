@@ -1,7 +1,7 @@
 import cv2
 import matplotlib.pyplot as plt  # 新增这一行
 
-image = cv2.imread('images/leaf.jpg')  # 你的路径
+image = cv2.imread('images/leaf.jpg')  
 
 if image is None:
     print("错误：未找到照片！检查路径和文件名")
