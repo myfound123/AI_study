@@ -54,11 +54,17 @@ for file_name in image_files:
     if not file_name.startswith("leaf_"):
         continue
     img_path = os.path.join(image_folder, file_name)
-    # 调用函数计算真实面积
-    real_area = extract_area(img_path)  # 这里需要你传参数
-    
+    # 调用函数计算真实面积，筛选坏图
+    try:
+        real_area = extract_area(img_path)
+        if real_area is None:
+            continue
+    except ValueError:
+        print("格式错误，已跳过")
+        continue
+    if real_area > 0:
     # 将结果存入字典，再放进列表
-    data_list.append({
+        data_list.append({
         "文件名": file_name,
         "预测面积(cm²)": round(real_area, 2)  # 保留两位小数
     })
